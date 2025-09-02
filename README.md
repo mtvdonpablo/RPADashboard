@@ -1,4 +1,28 @@
-# React + Vite
+# RPA Metrics Dashboard
+
+A dashboard designed to highlight the impact of automations built using UiPath.
+The RPA Metrics Dashboard provides leadership with a clear view of key performance indicators (KPIs) that reflect the impact and growth of the automation team. By visualizing performance trends, the dashboard helps leadership:
+
+- Evaluate progress against organizational goals
+
+- Identify opportunities for improvement
+
+- Make informed decisions on resource allocation and scaling initiatives
+
+## Features
+
+## Tech Stack
+
+## Installation and Setup
+
+
+## Author
+Don Joseph
+donjoseph28@gmail.com
+
+
+
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
