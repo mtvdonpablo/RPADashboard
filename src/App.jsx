@@ -1,17 +1,19 @@
 
 
 import './App.css'
-import Title from './title'
+import './AppShell.jsx'
+import AppShell from './AppShell.jsx'
 
 function App() {
 
   return (
     <>
-      <Title />
-
-
+      <AppShell>
+        <p>Dashboard</p>
+      </AppShell>
     </>
   )
 }
 
 export default App
+
