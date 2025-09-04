@@ -1,11 +1,24 @@
 import { Card,Heading,Icon,Stack } from "@chakra-ui/react"
 
-function KPICard({title,icon:IconComp,value,units}){
+
+function fomratValue(value,units){
     const cad = new Intl.NumberFormat("en-CA", {
         style: "currency",
         currency: "CAD",
         maximumFractionDigits: 0,
     });
+    let display='';
+    if(units ==='dollars'){
+        display = cad.format(Number(value))
+    } else if (units ==='hours'){
+        display = value.toFixed(2);
+    } else {
+        display = value;
+    }
+    return display;
+}
+
+function KPICard({title,icon:IconComp,value,units}){
     return(
         <Card.Root bg='gray.800' border='none' w='250px' h='130px'>
             <Card.Header >
@@ -16,7 +29,7 @@ function KPICard({title,icon:IconComp,value,units}){
                 
             </Card.Header>
             <Card.Body p={0} alignItems='center'>
-                <Heading size='5xl' color='white'>{ units==='dollars' ? cad.format(Number(value)): value}</Heading>
+                <Heading size='5xl' color='white'>{fomratValue(value,units)}</Heading>
                 
             </Card.Body>
             <Card.Footer />
