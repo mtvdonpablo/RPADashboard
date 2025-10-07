@@ -1,7 +1,6 @@
 // db.js
-require('dotenv').config();
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV || "development"}.local` });
 const sql = require('mssql/msnodesqlv8');
-
 const port = process.env.SQL_SERVER_PORT || 1433;
 const connStr =
   `Driver={ODBC Driver 18 for SQL Server};` +               // make sure this driver is installed

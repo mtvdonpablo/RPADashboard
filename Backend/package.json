@@ -17,6 +17,10 @@
     "mssql": "^11.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0",
     "nodemon": "^3.1.10"
   }
 }
