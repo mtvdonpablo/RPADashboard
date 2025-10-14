@@ -9,7 +9,6 @@ function Ticker() {
     const getRunCount = async () => {
       const response = await axios.get("/api/projects/runs");
       setCountArray(response.data);
-      console.log(response.data);
     };
     getRunCount();
   }, []);

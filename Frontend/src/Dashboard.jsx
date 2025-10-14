@@ -1,5 +1,6 @@
-import { SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid,GridItem } from "@chakra-ui/react";
 import KPICard from "./components/KPICard";
+import TransactionsGraph from "./components/TransactionsGraph";
 import {
   TreeStructureIcon,
   HourglassIcon,
@@ -21,14 +22,13 @@ function Dashboard() {
     };
     const getTimeSaved = async () => {
       const response = await axios.get("/api/timesavings/total");
-      console.log(response.data);
       setTimeSavedInHours(response.data.timeSaved);
     };
     const getCostsSaved = async () => {
       const response = await axios.get("/api/costsavings/total");
-      console.log(response.data);
       setCostSavedInDollars(response.data.costSaved);
     };
+    // maybe useMemo to avoid recalcualting kpi when different project is selected for bar chart.
     getNumProcessAutomated();
     getTimeSaved();
     getCostsSaved();
@@ -36,10 +36,7 @@ function Dashboard() {
   return (
     <>
       {/* KPI cards */}
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
-        gap={4}
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
         <KPICard
           title="Processes Automated"
           icon={TreeStructureIcon}
@@ -57,6 +54,12 @@ function Dashboard() {
           value={costSavedInDollars}
           units="dollars"
         />
+
+        <GridItem  colSpan={{ base: 1, md: 2, lg: 3 }}>
+          <TransactionsGraph />
+        </GridItem>
+        
+
       </SimpleGrid>
     </>
   );
