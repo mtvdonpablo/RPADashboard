@@ -1,25 +1,24 @@
-
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Card, SegmentGroup } from "@chakra-ui/react";
 import axios from "axios";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Bar, BarChart, XAxis, LabelList } from "recharts";
 
 const TransactionsGraph = () => {
   const [currentKey, setCurrentKey] = useState("ZOR Phase 2");
-  const [ monthlyTransactions,setMonthlyTransactions] = useState({ data: [], series: [] });
+  const [monthlyTransactions, setMonthlyTransactions] = useState({
+    data: [],
+    series: [],
+  });
 
-  useEffect(() =>{
-    const getMonthlyTransactions = async () =>{
-      const response = await axios.get("/api/projects/transactions");
-      console.log(response.data);
+  useEffect(() => {
+    const getMonthlyTransactions = async () => {
+      const response = await axios.get("/api/projects/transactions-by-month");
       setMonthlyTransactions(response.data);
     };
     getMonthlyTransactions();
   }, []);
-
-
 
   // const chart = useChart({
   //   data: [
@@ -38,18 +37,26 @@ const TransactionsGraph = () => {
   //     { name: "Hardware Renewal Phase 1", color: "blue.solid" },
   //   ],
   // });
-const chart = useChart({
-  data: monthlyTransactions.data,
-  series: monthlyTransactions.series,
-});
-  const totals = chart.data.reduce(
-    (acc, item) => ({
-      "ZOR Phase 2": acc["ZOR Phase 2"] + item["ZOR Phase 2"],
-      "PGI (ZOR)": acc["PGI (ZOR)"] + item["PGI (ZOR)"],
-      "Hardware Renewal Phase 1": acc["Hardware Renewal Phase 1"] + item["Hardware Renewal Phase 1"],
-    }),
-    { "ZOR Phase 2": 0, "PGI (ZOR)": 0, "Hardware Renewal Phase 1": 0 }
-  );
+  const chart = useChart({
+    data: monthlyTransactions.data,
+    series: monthlyTransactions.series,
+  });
+
+  // const totals = chart.data.reduce(
+  //   (acc, item) => ({
+  //     "ZOR Phase 2": acc["ZOR Phase 2"] + item["ZOR Phase 2"],
+  //     "PGI (ZOR)": acc["PGI (ZOR)"] + item["PGI (ZOR)"],
+  //     "Hardware Renewal Phase 1": acc["Hardware Renewal Phase 1"] + item["Hardware Renewal Phase 1"],
+  //   }),
+  //   { "ZOR Phase 2": 0, "PGI (ZOR)": 0, "Hardware Renewal Phase 1": 0 }
+  // );
+  const totals = chart.data.reduce((acc, item) => {
+    Object.keys(item).forEach((key) => {
+      if (key === "month") return; // ignore month
+      acc[key] = (acc[key] || 0) + item[key];
+    });
+    return acc;
+  }, {});
 
   const series = chart.getSeries({ name: currentKey });
 
@@ -62,28 +69,19 @@ const chart = useChart({
   return (
     <Card.Root maxW="full">
       <Card.Header alignItems="flex-start">
-        <Card.Title>Transaction Volume</Card.Title>
+        <Card.Title>Monthly Successful Transactions</Card.Title>
         <SegmentGroup.Root
           size="xs"
           value={currentKey}
           onValueChange={(e) => setCurrentKey(e.value)}
-          
         >
           <SegmentGroup.Indicator />
+
           <SegmentGroup.Items
-            items={[
-              {
-                value: "ZOR Phase 2",
-                label: `ZOR Phase 2 (${formatNumber(totals["ZOR Phase 2"])})`,
-              },
-              { value: "PGI (ZOR)", 
-                label: `PGI (ZOR) (${formatNumber(totals["PGI (ZOR)"])})` ,
-              },
-              {
-                value: "Hardware Renewal Phase 1",
-                label: `Hardware Renewal Phase 1 (${formatNumber(totals["Hardware Renewal Phase 1"])})`,
-              },
-            ]}
+            items={chart.series.map((s) => ({
+              value: s.name,
+              label: `${s.name} (${formatNumber(totals[s.name] || 0)})`,
+            }))}
           />
         </SegmentGroup.Root>
       </Card.Header>
