@@ -42,16 +42,25 @@ npm install
 
 ### 3. Configure environment variables
 Create a .env.development.local file in the project root:
+
 # Example values
+
+```env
 PORT=5000
 SQL_SERVER=your_sql_server_address
 SQL_DATABASE=your_database_name
 SQL_SERVER_PORT=your_sql_server_port
 PROJECT_IDS=comma_separated_list_of_project_ids
 FTE_HOURS_PER_YEAR=your_fte_hours_per_year
+````
 
 ### 4. Start the development environment
+
 Frontend:
+```bash
 npm run dev
+```
 Backend:
+```bash
 npm run devStart
+```
