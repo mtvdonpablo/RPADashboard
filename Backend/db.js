@@ -3,11 +3,11 @@ require("dotenv").config({ path: `.env.${process.env.NODE_ENV || "development"}.
 const sql = require('mssql/msnodesqlv8');
 const port = process.env.SQL_SERVER_PORT || 1433;
 const connStr =
-  `Driver={ODBC Driver 18 for SQL Server};` +               // make sure this driver is installed
-  `Server=${process.env.SQL_SERVER},${port};` +             // e.g. bidm.opentext.com,1433
-  `Database=${process.env.SQL_DATABASE};` +                 // e.g. DS_ADHOC_BOPs
-  `Trusted_Connection=Yes;` +                               // Windows Auth
-  `Encrypt=Yes;TrustServerCertificate=Yes;`;                // common requirement for remote servers
+  `Driver={ODBC Driver 18 for SQL Server};` +              
+  `Server=${process.env.SQL_SERVER},${port};` +             
+  `Database=${process.env.SQL_DATABASE};` +                 
+  `Trusted_Connection=Yes;` +                               
+  `Encrypt=Yes;TrustServerCertificate=Yes;`;                
 
 const config = { connectionString: connStr, driver: 'msnodesqlv8' };
 const pool = new sql.ConnectionPool(config);
