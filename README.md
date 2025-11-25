@@ -17,7 +17,6 @@ The **RPA Metrics Dashboard** provides leadership with a clear view of key perfo
 - **Vite** (blazing-fast dev/build tool)
 - **Chakra UI** (UI components + design system)
 - **Recharts** (charting library)
-- **Framer Motion** (animations)
 - **Axios** (API communication)
 
 ### Backend
@@ -38,8 +37,9 @@ git clone https://github.com/mtvdonpablo/RPADashboard.git
 cd RPADashboard
 ```
 ### 2. Install dependencies
+```bash
 npm install
-
+```
 ### 3. Configure environment variables
 Create a .env.development.local file in the project root:
 
