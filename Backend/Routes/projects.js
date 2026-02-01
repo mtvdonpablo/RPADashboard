@@ -42,6 +42,7 @@ projectsRouter.get("/transactions-by-month", async (req, res) => {
   try {
     await poolConnect;
 
+    const year = req.query.year ? parseInt(req.query.year, 10) : new Date().getFullYear();
 
     const sqlQuery = `
       WITH Txn AS (
@@ -50,7 +51,7 @@ projectsRouter.get("/transactions-by-month", async (req, res) => {
             ProjectName,
             TRY_CONVERT(date, CONVERT(varchar(8), TransactionDate), 112) AS TxnDate
         FROM [DS_ADHOC_BOPs].[rpa].[Master_Impact_Report]
-        WHERE 
+        WHERE
             TransactionDate IS NOT NULL
             AND Status = 'Pass'
             AND ProjectID IN (${projectIDString})
@@ -62,7 +63,7 @@ projectsRouter.get("/transactions-by-month", async (req, res) => {
           ProjectName,
           COUNT(*)                 AS TransactionCount
       FROM Txn
-      WHERE TxnDate >= '2025-04-01'
+      WHERE YEAR(TxnDate) = ${year}
       GROUP BY
           YEAR(TxnDate),
           MONTH(TxnDate),
@@ -115,6 +116,30 @@ projectsRouter.get("/transactions-by-month", async (req, res) => {
 
     // Final response
     res.json({ data, series });
+  } catch (err) {
+    console.error("SQL error", err);
+    res.status(500).send("Database query failed");
+  }
+});
+
+projectsRouter.get("/transactions-years", async (req, res) => {
+  try {
+    await poolConnect;
+
+    const sqlQuery = `
+      SELECT DISTINCT YEAR(TRY_CONVERT(date, CONVERT(varchar(8), TransactionDate), 112)) AS [Year]
+      FROM [DS_ADHOC_BOPs].[rpa].[Master_Impact_Report]
+      WHERE
+          TransactionDate IS NOT NULL
+          AND Status = 'Pass'
+          AND ProjectID IN (${projectIDString})
+      ORDER BY [Year] DESC;
+    `;
+
+    const result = await pool.request().query(sqlQuery);
+    const years = result.recordset.map((r) => r.Year);
+
+    res.json({ years });
   } catch (err) {
     console.error("SQL error", err);
     res.status(500).send("Database query failed");

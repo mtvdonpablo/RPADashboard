@@ -1,5 +1,5 @@
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Card, SegmentGroup } from "@chakra-ui/react";
+import { Card, SegmentGroup, NativeSelect } from "@chakra-ui/react";
 import axios from "axios";
 
 import { useState, useEffect } from "react";
@@ -7,18 +7,28 @@ import { Bar, BarChart, XAxis, LabelList } from "recharts";
 
 const TransactionsGraph = () => {
   const [currentKey, setCurrentKey] = useState("ZOR Phase 2");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears, setAvailableYears] = useState([]);
   const [monthlyTransactions, setMonthlyTransactions] = useState({
     data: [],
     series: [],
   });
 
   useEffect(() => {
+    const getAvailableYears = async () => {
+      const response = await axios.get("/api/projects/transactions-years");
+      setAvailableYears(response.data.years);
+    };
+    getAvailableYears();
+  }, []);
+
+  useEffect(() => {
     const getMonthlyTransactions = async () => {
-      const response = await axios.get("/api/projects/transactions-by-month");
+      const response = await axios.get(`/api/projects/transactions-by-month?year=${selectedYear}`);
       setMonthlyTransactions(response.data);
     };
     getMonthlyTransactions();
-  }, []);
+  }, [selectedYear]);
 
   // const chart = useChart({
   //   data: [
@@ -69,7 +79,21 @@ const TransactionsGraph = () => {
   return (
     <Card.Root maxW="full">
       <Card.Header alignItems="flex-start">
-        <Card.Title>Monthly Successful Transactions</Card.Title>
+        <Card.Title display="flex" justifyContent="space-between" alignItems="center" width="100%">
+          Monthly Successful Transactions
+          <NativeSelect.Root size="sm" width="auto">
+            <NativeSelect.Field
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </NativeSelect.Field>
+          </NativeSelect.Root>
+        </Card.Title>
         <SegmentGroup.Root
           size="xs"
           value={currentKey}
