@@ -7,10 +7,10 @@ import { getDateFilter } from "../utils/dateFilter.js";
 
 // assuming 40 hour work weeks
 const avgWagePerMinuteInCents = new Map([
-  ["15", 44], // $55K/yr  on glassdoor billing coordinator
-  ["29", 50], // $63K/yr Median on glassdoor fullfillment specialist
-  ["100", 47], // In Hardware documentation
-  ["16", 44], // $55K/yr  on glassdoor for APA 2 SAP billing coordinator
+  ["15", 51], // $64K/yr  on glassdoor billing coordinator ZOR Phase 2
+  ["29", 50], // $63K/yr Median on glassdoor fullfillment specialist (PGI-ZOR)
+  ["24", 47], // In Hardware documentation
+  ["16", 51], // $64K/yr  on glassdoor for APA 2 SAP billing coordinator
 ]);
 // Map that stores the time savings for each transaction for every proccess  [project id, time saved in minutes]
 const projectTimeSavings = new Map([
