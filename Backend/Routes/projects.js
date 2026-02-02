@@ -177,11 +177,18 @@ SELECT
     SUM(CASE WHEN Status = 'Fail' THEN 1 ELSE 0 END) AS failCount,
     ROUND(
         (CAST(SUM(CASE WHEN Status = 'Pass' THEN 1 ELSE 0 END) AS FLOAT) /
-        NULLIF(SUM(CASE WHEN Status IN ('Pass', 'Fail') THEN 1 ELSE 0 END), 0)) * 100, 
+        NULLIF(SUM(CASE WHEN Status IN ('Pass', 'Fail') THEN 1 ELSE 0 END), 0)) * 100,
         1
     ) AS successRate
 FROM [DS_ADHOC_BOPs].[rpa].[Master_Impact_Report]
-WHERE Status IN ('Pass', 'Fail') And ProjectID IN (${projectIDString})
+WHERE Status IN ('Pass', 'Fail')
+    AND ProjectID IN (${projectIDString})
+    AND (ErrorMessage IS NULL OR (
+        ErrorMessage NOT LIKE 'BE -%'
+        AND ErrorMessage != '0x80040465'
+        AND ErrorMessage != 'PGI text not found'
+        AND ErrorMessage != 'Post Goods Issue button greyed out or not working'
+    ))
 GROUP BY ProjectName
 ORDER BY successRate DESC;
 

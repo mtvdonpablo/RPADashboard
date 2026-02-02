@@ -85,6 +85,8 @@ const TransactionsGraph = () => {
             <NativeSelect.Field
               value={selectedYear}
               onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
+              paddingRight={2}
+              paddingLeft={2}
             >
               {availableYears.map((year) => (
                 <option key={year} value={year}>
