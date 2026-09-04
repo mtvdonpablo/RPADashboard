@@ -84,8 +84,8 @@ Key design goals:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/mtvdonpablo/RPADashboard.git
-cd RPADashboard
+git clone https://github.com/mtvdonpablo/EngineeringDashboard.git
+cd EngineeringDashboard
 ```
 
 ### 2. Install dependencies
